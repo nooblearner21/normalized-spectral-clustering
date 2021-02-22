@@ -1,3 +1,3 @@
-#Normalized Spectrcal Clustering
+# Normalized Spectrcal Clustering
 
 By Dan & Yoni
