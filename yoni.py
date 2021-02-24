@@ -29,9 +29,9 @@ def mgs_algorithm(aroof):
 
         for j in range(i + 1, n):
             r_matrix[i, j] = q_matrix.transpose()[:, i] @ aroof[:, j]
-            aroof[:, j] = aroof[:, j] - (r_matrix[i, j] @ q_matrix[:, i])
+            aroof[:, j] = aroof[:, j] - (r_matrix[i, j] * q_matrix[:, i])
 
-    return tuple(q_matrix, r_matrix)
+    return (q_matrix, r_matrix)
 
 
 
@@ -46,4 +46,4 @@ print(test_d)
 laplace = build_laplace_matrix(test, test_d)
 print(laplace)
 
-mgs_algorithm(laplace)
+print(mgs_algorithm(laplace))
