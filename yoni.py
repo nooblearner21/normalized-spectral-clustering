@@ -72,7 +72,9 @@ def build_u_matrix(matrix_tuple):
     return u_matrix
 
 
-def build_t_matrix(u_matrix):
+def build_t_matrix(matrix_tuple):
+    u_matrix = build_u_matrix(matrix_tuple)
+
     n = len(u_matrix)
     k = len(u_matrix[0])
     t_matrix = np.ndarray(shape=(n, k))
