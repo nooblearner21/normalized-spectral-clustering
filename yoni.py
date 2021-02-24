@@ -34,16 +34,61 @@ def mgs_algorithm(aroof):
     return (q_matrix, r_matrix)
 
 
+def eigengap_heuristic(arr):
+    n = len(arr)
+    sorted_arr = sorted(arr)
+    k = 0
+    max_gap = 0
+
+    for i in range(0, int(np.floor(n / 2))):
+        curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
+
+        if max_gap < curr_gap:
+            max_gap = curr_gap
+            k = i
+
+    return k
+
+
+def build_u_matrix(matrix_tuple):
+    n = len(matrix_tuple[0])
+    eigenvalues = matrix_tuple[0].diagonal().copy()
+    eigenvectors = matrix_tuple[1].transpose().copy()
+    k = eigengap_heuristic(eigenvalues) + 1
+
+    eigen_map = []
+
+    for i in range(n):
+        eigen_map.append({eigenvalues[i]: eigenvectors[i]})
+
+    sorted_map = sorted(eigen_map, key=lambda item: list(item.keys())[0])
+
+    u_matrix = np.ndarray(shape=(n, k))
+
+    for i in range(k):
+        vector = list(sorted_map[i].values())[0]
+        u_matrix[:, i] = vector
+
+    return u_matrix
+
+
+def build_t_matrix(u_matrix):
+    n = len(u_matrix)
+    k = len(u_matrix[0])
+    t_matrix = np.ndarray(shape=(n, k))
+    u_matrix_rows_norms = LA.norm(u_matrix, axis=1)
+
+    for i in range(n):
+        t_matrix[i] = np.divide(u_matrix[i], u_matrix_rows_norms[i])
+
+    return t_matrix
+
 
 
 #testing
 test = np.array([[0, 1, 1, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0]])
-print(test)
+test_2 = np.array([[5, 5, 5, 5], [2, 2, 2, 2], [1, 1, 1, 1], [4, 4, 4, 4]])
 
 test_d = build_d_matrix(test)
-print(test_d)
 
 laplace = build_laplace_matrix(test, test_d)
-print(laplace)
-
-print(mgs_algorithm(laplace))
