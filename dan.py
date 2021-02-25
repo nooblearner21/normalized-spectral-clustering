@@ -67,3 +67,39 @@ def qr_iterations(matrix):
         qroof = qroof @ qr[0]
     
     return (aroof, qroof)
+
+
+
+
+def cluster(matrix_t, centroids):
+
+    #create list of K lists
+    index_list = [[] for i in range(len(centroids))]
+
+    curr_row = -1
+    for row in matrix_t:
+        curr_row += 1
+        min_dist = float("inf")
+        index = 0
+        curr_centroid = -1
+        for centroid in centroids:
+            curr_centroid += 1
+            dist = numpy.linalg.norm(row-centroid)
+            if(dist < min_dist):
+                min_dist = dist
+                index = curr_centroid
+        index_list[index].append(curr_row)
+    
+    return index_list
+
+def output_data(index_list, cluster_num):
+    with open file("clusters.txt", "w") as f:
+        f.write(cluster_num)
+        for indices in index_list:
+            if len(indices) == 0:
+                break
+            else:
+                f.write(indices)
+    f.close()
+    
+
