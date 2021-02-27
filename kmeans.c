@@ -269,7 +269,10 @@ static PyObject* calc(PyObject *self, PyObject *args)
     }
 
 
+    printf("%d", dimensions);
+    printf("%d", clusterNum);
     printCentroids(dimensions, clusterNum, *centroids);
+
 
 
     for(i=0; i < clusterNum; i++)
@@ -283,6 +286,7 @@ static PyObject* calc(PyObject *self, PyObject *args)
         }
 
         PyList_Append(centroid_list, centroid_item);
+        Py_DecRef(centroid_item);
 
     }
 

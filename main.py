@@ -2,7 +2,8 @@ import argparse
 from sklearn.datasets import make_blobs
 from scipy.sparse.csgraph import laplacian
 import numpy as np
-
+from numpy import linalg as LA
+import kmeanspp
 
 parser = argparse.ArgumentParser()
 parser.add_argument("k", type=int)
@@ -209,7 +210,6 @@ if __name__ == '__main__':
     z = get_normalized_laplacian(y)
 
     q = qr_iterations(z)
-    u = build_u_matrix(r[0])
-    t = build_t_matrix(u)
-    k = eigengap_heuristic()
-    kmeanspp.calc(N, d, x, centroids.tolist(), k, 300)
+    t = build_t_matrix(q)
+    k = eigengap_heuristic(t[0])
+    g = kmeanspp.calc(x.shape[0], k, list(x), list(x), k, 300)
