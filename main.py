@@ -211,5 +211,6 @@ if __name__ == '__main__':
 
     q = qr_iterations(z)
     t = build_t_matrix(q)
-    k = eigengap_heuristic(t[0])
-    g = kmeanspp.calc(x.shape[0], k, list(x), list(x), k, 300)
+
+
+    g = kmeanspp.calc(x.shape[0], t.shape[1], list(x), list(x), t.shape[1], 300)
