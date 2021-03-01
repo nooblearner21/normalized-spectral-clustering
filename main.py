@@ -121,7 +121,7 @@ def eigengap_heuristic(arr):
     k = 0
     max_gap = 0
 
-    for i in range(0, int(np.floor(n / 2))):
+    for i in range(0, int(np.ceil(n / 2))):
         curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
 
         if max_gap < curr_gap:
