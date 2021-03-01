@@ -162,7 +162,9 @@ def build_t_matrix(matrix_tuple):
     u_matrix_rows_norms = LA.norm(u_matrix, axis=1)
 
     for i in range(n):
-        t_matrix[i] = np.divide(u_matrix[i], u_matrix_rows_norms[i])
+        row_i_norm = u_matrix_rows_norms[i]
+        if row_i_norm != 0:
+            t_matrix[i] = np.divide(u_matrix[i], u_matrix_rows_norms[i])
 
     return t_matrix
 
