@@ -105,8 +105,13 @@ def mgs_algorithm(aroof):
     for i in range(n):
         column_i_norm = LA.norm(aroof, axis=0)[i]
 
-        r_matrix[i, i] = np.power(column_i_norm, 2)
-        q_matrix[:, i] = np.divide(aroof[:, i], column_i_norm)
+        r_matrix[i, i] = column_i_norm
+
+        if column_i_norm > 0.0001:
+            q_matrix[:, i] = np.divide(aroof[:, i], column_i_norm)
+        else:
+            raise Exception("norm is 0, so we quit the program")
+
 
         for j in range(i + 1, n):
             r_matrix[i, j] = q_matrix.transpose()[:, i] @ aroof[:, j]
@@ -135,6 +140,8 @@ def build_u_matrix(matrix_tuple):
     n = len(matrix_tuple[0])
     eigenvalues = matrix_tuple[0].diagonal().copy()
     eigenvectors = matrix_tuple[1].transpose().copy()
+
+    #k + 1 because arrays starts from 0...
     k = eigengap_heuristic(eigenvalues) + 1
 
     eigen_map = []
@@ -161,6 +168,7 @@ def build_t_matrix(matrix_tuple):
     t_matrix = np.ndarray(shape=(n, k))
     u_matrix_rows_norms = LA.norm(u_matrix, axis=1)
 
+    #change to numpy function instead of for loop to improve performance
     for i in range(n):
         row_i_norm = u_matrix_rows_norms[i]
         if row_i_norm != 0:
@@ -201,9 +209,6 @@ def output_data(index_list, cluster_num):
                 f.write(indices)
     f.close()
     
-
-
-
 
 
 if __name__ == '__main__':
