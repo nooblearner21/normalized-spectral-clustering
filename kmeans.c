@@ -269,9 +269,9 @@ static PyObject* calc(PyObject *self, PyObject *args)
     }
 
 
-    printf("%d", dimensions);
-    printf("%d", clusterNum);
-    printCentroids(dimensions, clusterNum, *centroids);
+    // printf("%d", dimensions);
+    // printf("%d", clusterNum);
+    // printCentroids(dimensions, clusterNum, *centroids);
 
 
 

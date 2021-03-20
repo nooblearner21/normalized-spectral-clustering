@@ -4,6 +4,7 @@ from scipy.sparse.csgraph import laplacian
 import numpy as np
 from numpy import linalg as LA
 import kmeanspp
+import math
 
 parser = argparse.ArgumentParser()
 parser.add_argument("k", type=int)
@@ -33,7 +34,6 @@ def get_weighted_adj_matrix(observations):
 
     zeroshape = observations.shape[0]
     weightedMatrix = np.zeros((zeroshape,zeroshape), dtype=np.float64)
-    print(weightedMatrix)
 
     #counters
     i = 0
@@ -42,8 +42,8 @@ def get_weighted_adj_matrix(observations):
     #Calculate euclidean distance between all nodes and fill node weights in our adjacency matrix
     for vectorx in observations:
         for vectory in observations:
-            dist = np.sum((vectorx - vectory) ** 2) / 2
-            weightedMatrix[i,j] = np.exp(-dist)
+            dist = math.sqrt(np.sum((vectorx - vectory) ** 2))
+            weightedMatrix[i,j] = np.exp(-dist) / 2
 
             j += 1
         i += 1
@@ -83,31 +83,36 @@ def qr_iterations(matrix):
     qroof = np.identity(matrix.shape[1])
 
     #change to N
-    for i in range(10000):
+    for i in range(1000):
         qr = mgs_algorithm(aroof)
         
-        aroof = qr[1] @ qr[0]
+        aroof = qr[0] @ qr[1]
 
 
         matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ qr[0])))
+        
+        if((matrix_distance < 0.0001).all()):
 
-        if((matrix_distance > 0.0001).all()):
             return (aroof, qroof)
         qroof = qroof @ qr[0]
-    
+
+
+
     return (aroof, qroof)
 
 def mgs_algorithm(aroof):
     n = len(aroof)
     q_matrix = np.zeros(shape=(n, n))
     r_matrix = np.zeros(shape=(n, n))
-
+    
     for i in range(n):
+
         column_i_norm = LA.norm(aroof, axis=0)[i]
 
         r_matrix[i, i] = column_i_norm
 
-        if column_i_norm > 0.0001:
+        if column_i_norm > 0.0000001:
+
             q_matrix[:, i] = np.divide(aroof[:, i], column_i_norm)
         else:
             raise Exception("norm is 0, so we quit the program")
@@ -116,6 +121,7 @@ def mgs_algorithm(aroof):
         for j in range(i + 1, n):
             r_matrix[i, j] = q_matrix.transpose()[:, i] @ aroof[:, j]
             aroof[:, j] = aroof[:, j] - (r_matrix[i, j] * q_matrix[:, i])
+
 
     return (q_matrix, r_matrix)
 
@@ -212,12 +218,16 @@ def output_data(index_list, cluster_num):
 
 
 if __name__ == '__main__':
-    print(x)
+
     y = get_weighted_adj_matrix(x)
     z = get_normalized_laplacian(y)
 
+
     q = qr_iterations(z)
+
     t = build_t_matrix(q)
 
+
+    
 
     g = kmeanspp.calc(x.shape[0], t.shape[1], list(x), list(x), t.shape[1], 300)
