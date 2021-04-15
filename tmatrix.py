@@ -7,7 +7,7 @@ def qr_iterations(matrix):
     qroof = np.identity(matrix.shape[1])
 
     # change to N
-    for i in range(1000):
+    for i in range(10000):
         qr = mgs_algorithm(aroof)
 
         aroof = qr[1] @ qr[0]
@@ -32,14 +32,15 @@ def mgs_algorithm(aroof):
 
         r_matrix[i, i] = column_i_norm
 
-        if column_i_norm > 0.0000001:
-
+        if column_i_norm > 0:
             q_matrix[:, i] = np.divide(aroof[:, i], column_i_norm)
         else:
             raise Exception("norm is 0, so we quit the program")
 
         for j in range(i + 1, n):
-            r_matrix[i, j] = q_matrix.transpose()[:, i] @ aroof[:, j]
+            #q_i_column = q_matrix[:, i]
+            #aroof_j_column = aroof[:, j]
+            r_matrix[i, j] = q_matrix[:, i] @ aroof[:, j]
             aroof[:, j] = aroof[:, j] - (r_matrix[i, j] * q_matrix[:, i])
 
     return (q_matrix, r_matrix)
