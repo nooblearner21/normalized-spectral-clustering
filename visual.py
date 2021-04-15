@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 #test case of index input
 clusters_points_indexes = [[1, 2], [7, 8, 3], [5, 6], [4, 0, 9]]
 k = len(clusters_points_indexes)
@@ -15,38 +16,65 @@ def build_labels(n, clusters_array):
         for vector_index in clusters_array[cluster]:
             labels[vector_index] = cluster
 
+    return labels
 
-#two dimensions case
-def visual_2d(observations, labels):
-    fig = plt.figure()
 
-    #X_1, labels_1 = make_blobs(n_samples=10, n_features=2)
+# two dimensions case
+def visual_2d(observations, npc_labels, kmeans_labels):
+
     x = observations[0:, 0]
     y = observations[0:, 1]
 
-    ax_1 = fig.add_subplot(211)
-    ax_1.scatter(x, y, c=labels, cmap='RdBu')
+    fig, axs = plt.subplots(1, 2, figsize=plt.figaspect(0.5))
 
-    fig.suptitle("Project by Dan and Yoni")
+    axs[0].scatter(x, y, c=npc_labels, cmap='PiYG')
+    axs[0].set_title('NPC results')
 
-    plt.show()
+    axs[1].scatter(x, y, c=kmeans_labels, cmap='PiYG')
+    axs[1].set_title('KMeans results')
 
-#three dimensions case
-def visual_3d(observations, labels):
-    fig = plt.figure()
+    fig.suptitle(f"Data was generated from the values: \n"
+                 f"n = {len(observations)} , d = {len(observations[0])} \n"
+                 f"The k that was used for both algorithms was {k} \n"
+                 f"The Jaccard measure for Spectral Clustering: \n"
+                 f"The Jaccard measure for K-means: ")
 
-    #X_2, labels_2 = make_blobs(n_samples=10, n_features=3)
+    plt.subplots_adjust(top=0.75)
+
+    plt.savefig('figure.pdf')
+
+
+# three dimensions case
+def visual_3d(observations, npc_labels, kmeans_labels):
+
     x = observations[0:, 0]
     y = observations[0:, 1]
     z = observations[0:, 2]
 
-    ax_2 = fig.add_subplot(212, projection='3d')
-    ax_2.scatter(x, y, z, c=labels, cmap="RdBu")
+    fig = plt.figure(figsize=plt.figaspect(0.5))
+    ax_2 = fig.add_subplot(121, projection='3d')
+    ax_2.scatter(x, y, z, c=npc_labels, cmap="PiYG")
+    ax_2.set_title('NPC results')
 
-    fig.suptitle("Project by Dan and Yoni")
+    bx_2 = fig.add_subplot(122, projection='3d')
+    bx_2.scatter(x, y, z, c=kmeans_labels, cmap='PiYG')
+    bx_2.set_title('KMeans results')
 
-    plt.show()
+    fig.suptitle(f"Data was generated from the values: \n"
+                 f"n = {len(observations)} , d = {len(observations[0])} \n"
+                 f"The k that was used for both algorithms was {k} \n"
+                 f"The Jaccard measure for Spectral Clustering: \n"
+                 f"The Jaccard measure for K-means: ")
+
+    plt.subplots_adjust(top=0.75)
+
+    plt.savefig('figure.pdf')
 
 
+def visual(observations, npc_labels, kmeans_labels):
+    if (len(observations[0]) == 2):
+        visual_2d(observations, npc_labels, kmeans_labels)
+    elif (len(observations[0]) == 3):
+        visual_3d(observations, npc_labels, kmeans_labels)
 
 
