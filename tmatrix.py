@@ -12,7 +12,6 @@ def qr_iterations(matrix):
         qr = mgs_algorithm(aroof)
 
         aroof = qr[1] @ qr[0]
-        print(qroof @ qr[0])
         matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ qr[0])))
 
         if ((matrix_distance < 0.0001).all()):

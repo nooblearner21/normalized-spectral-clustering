@@ -55,7 +55,6 @@ def get_weighted_adj_matrix(observations):
     return weightedMatrix
 
 
-
 def get_diagonal_degree_matrix(adj_matrix):
     diag_values = np.sum(adj_matrix, axis=1)
     diag_values_normalized = np.power(diag_values, -0.5)
@@ -67,12 +66,12 @@ def get_diagonal_degree_matrix(adj_matrix):
 
 def get_normalized_laplacian(weighted_adj_matrix):
     
-    #create NxN Identity Matrix I
+    # create NxN Identity Matrix I
     id_matrix = np.identity(weighted_adj_matrix.shape[1])
     #Retrieve Diagonal degree matrix
     diagonal_matrix = get_diagonal_degree_matrix(weighted_adj_matrix)
 
-    #Calculate and return laplacian
+    # Calculate and return laplacian
     laplacian = id_matrix - (diagonal_matrix @ weighted_adj_matrix @ diagonal_matrix)
 
     return laplacian
@@ -86,7 +85,7 @@ def qr_iterations(matrix):
     for i in range(1000):
         qr = mgs_algorithm(aroof)
         
-        aroof = qr[0] @ qr[1]
+        aroof = qr[1] @ qr[0]
 
 
         matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ qr[0])))

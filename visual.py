@@ -10,11 +10,11 @@ k = len(clusters_points_indexes)
 #labeling each to each point its cluster index,change to n afterwards
 def build_labels(n, clusters_array):
     #change to N
-    labels = np.zeros(n)
+    labels = np.zeros(n, dtype=int)
 
     for cluster in range(len(clusters_array)):
         for vector_index in clusters_array[cluster]:
-            labels[vector_index] = cluster
+            labels[int(vector_index)] = cluster
 
     return labels
 
@@ -27,10 +27,10 @@ def visual_2d(observations, npc_labels, kmeans_labels):
 
     fig, axs = plt.subplots(1, 2, figsize=plt.figaspect(0.5))
 
-    axs[0].scatter(x, y, c=npc_labels, cmap='PiYG')
+    axs[0].scatter(x, y, c=npc_labels, cmap='YlGnBu')
     axs[0].set_title('NPC results')
 
-    axs[1].scatter(x, y, c=kmeans_labels, cmap='PiYG')
+    axs[1].scatter(x, y, c=kmeans_labels, cmap='YlGnBu')
     axs[1].set_title('KMeans results')
 
     fig.suptitle(f"Data was generated from the values: \n"

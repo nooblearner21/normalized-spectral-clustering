@@ -1,3 +1,6 @@
+import numpy as np
+import math
+
 # Receive N observations ndarray as argument and returns the
 # weighted adjacency matrix
 def get_weighted_adj_matrix(observations):
