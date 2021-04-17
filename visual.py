@@ -27,10 +27,10 @@ def visual_2d(observations, npc_labels, kmeans_labels):
 
     fig, axs = plt.subplots(1, 2, figsize=plt.figaspect(0.5))
 
-    axs[0].scatter(x, y, c=npc_labels, cmap='YlGnBu')
+    axs[0].scatter(x, y, c=npc_labels, cmap='rainbow')
     axs[0].set_title('NPC results')
 
-    axs[1].scatter(x, y, c=kmeans_labels, cmap='YlGnBu')
+    axs[1].scatter(x, y, c=kmeans_labels, cmap='rainbow')
     axs[1].set_title('KMeans results')
 
     fig.suptitle(f"Data was generated from the values: \n"
@@ -53,11 +53,11 @@ def visual_3d(observations, npc_labels, kmeans_labels):
 
     fig = plt.figure(figsize=plt.figaspect(0.5))
     ax_2 = fig.add_subplot(121, projection='3d')
-    ax_2.scatter(x, y, z, c=npc_labels, cmap="PiYG")
+    ax_2.scatter(x, y, z, c=npc_labels, cmap="rainbow")
     ax_2.set_title('NPC results')
 
     bx_2 = fig.add_subplot(122, projection='3d')
-    bx_2.scatter(x, y, z, c=kmeans_labels, cmap='PiYG')
+    bx_2.scatter(x, y, z, c=kmeans_labels, cmap='rainbow')
     bx_2.set_title('KMeans results')
 
     fig.suptitle(f"Data was generated from the values: \n"
