@@ -1,11 +1,5 @@
 env/
-/env
-env/*
-**/env
-*/env
-env
-./env
-build
-/build
-
+build/
+figure.pdf
+__pycache__
 kmeanspp.cp*
