@@ -5,5 +5,7 @@ env/*
 */env
 env
 ./env
+build
+/build
 
 kmeanspp.cp*

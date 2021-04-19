@@ -54,20 +54,26 @@ def get_normalized_laplacian(observations):
 
 
 def qr_iterations(matrix):
+
     aroof = np.copy(matrix)
-    qroof = np.identity(matrix.shape[1])
+    qroof = np.identity(len(matrix))
 
-    N = len(matrix)
-    # change to N
-    for i in range(N):
-        qr = mgs_algorithm(aroof)
 
-        aroof = qr[1] @ qr[0]
-        matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ qr[0])))
 
-        if ((matrix_distance < 0.0001).all()):
+    #change to N
+    for i in range(len(matrix)):
+        q, r = mgs_algorithm(aroof)
+        
+        aroof = r @ q
+
+        matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ q)))
+
+        if((matrix_distance < 0.0001).all()):
             return (aroof, qroof)
-        qroof = qroof @ qr[0]
+
+        qroof = qroof @ q
+
+
 
     return (aroof, qroof)
 
