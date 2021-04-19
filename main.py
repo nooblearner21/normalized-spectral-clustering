@@ -2,9 +2,8 @@ import argparse
 import numpy as np
 from sklearn.datasets import make_blobs
 
-import laplace
 import visual
-from ops import qr_iterations, build_t_matrix
+from ops import qr_iterations, build_t_matrix, get_normalized_laplacian
 
 import kmeanspp
 
@@ -46,7 +45,7 @@ def cluster(matrix_t, centroids):
 observations, labels = make_blobs(n_samples=30, n_features=3)
 
 # Main
-laplace_matrix = laplace.get_normalized_laplacian(observations)
+laplace_matrix = get_normalized_laplacian(observations)
 
 q = qr_iterations(laplace_matrix)
 
