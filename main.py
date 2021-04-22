@@ -6,6 +6,7 @@ import visual
 from ops import qr_iterations, build_t_matrix, get_normalized_laplacian
 
 import kmeanspp
+from kmeans_pp import k_means_pp
 
 parser = argparse.ArgumentParser()
 parser.add_argument("k", type=int)
@@ -42,7 +43,7 @@ def cluster(matrix_t, centroids):
 
 
 #example
-observations, labels = make_blobs(n_samples=30, n_features=3)
+observations, labels = make_blobs(n_samples=100, n_features=3)
 
 # Main
 laplace_matrix = get_normalized_laplacian(observations)
@@ -50,12 +51,17 @@ laplace_matrix = get_normalized_laplacian(observations)
 q = qr_iterations(laplace_matrix)
 
 t = build_t_matrix(q)
-num_of_clusters = t.shape[1]
+k = t.shape[1]
 
-g = kmeanspp.calc(observations.shape[0], num_of_clusters, t[0:].tolist(), t[0:num_of_clusters].tolist(), num_of_clusters, 300)
+#g = kmeanspp.calc(observations.shape[0], num_of_clusters, t[0:].tolist(), t[0:num_of_clusters].tolist(), num_of_clusters, 300)
+spectral_result = k_means_pp(k, observations.shape[0], k, 300, t[0:])
+kmeans_result = k_means_pp(k, observations.shape[0], observations.shape[1], 300, observations)
 
-clusters_array = cluster(t, g)
+spectral_clusters_array = cluster(t, spectral_result)
 
-my_labels = visual.build_labels(len(observations), clusters_array)
+kmeans_clusters_array = cluster(observations, kmeans_result)
 
-visual.visual(observations, my_labels, labels)
+spectral_labels = visual.build_labels(len(observations), spectral_clusters_array)
+kmeans_labels = visual.build_labels(len(observations), kmeans_clusters_array)
+
+visual.visual(observations, spectral_labels, kmeans_labels)
