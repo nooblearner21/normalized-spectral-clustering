@@ -15,7 +15,7 @@ def build_labels(n, clusters_array):
 
 
 # two dimensions case
-def visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k):
+def visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs):
 
     x = observations[0:, 0]
     y = observations[0:, 1]
@@ -29,7 +29,7 @@ def visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_
     axs[1].set_title('KMeans results')
 
     fig.suptitle(f"Data was generated from the values: \n"
-                 f"n = {len(observations)} , d = {len(observations[0])} \n"
+                 f"n = {len(observations)} , k = {k_for_blobs} \n"
                  f"The k that was used for both algorithms was {k} \n"
                  f"The Jaccard measure for Spectral Clustering: {spectral_measure}\n"
                  f"The Jaccard measure for K-means: {kmeans_measure}")
@@ -40,7 +40,7 @@ def visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_
 
 
 # three dimensions case
-def visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k):
+def visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs):
 
     x = observations[0:, 0]
     y = observations[0:, 1]
@@ -56,7 +56,7 @@ def visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_
     bx_2.set_title('KMeans results')
 
     fig.suptitle(f"Data was generated from the values: \n"
-                 f"n = {len(observations)} , d = {len(observations[0])} \n"
+                 f"n = {len(observations)} , k = {k_for_blobs} \n"
                  f"The k that was used for both algorithms was {k} \n"
                  f"The Jaccard measure for Spectral Clustering: {spectral_measure}\n"
                  f"The Jaccard measure for K-means: {kmeans_measure}")
@@ -66,11 +66,11 @@ def visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_
     plt.savefig('figure.pdf')
 
 
-def visual(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k):
+def visual(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs):
     if (len(observations[0]) == 2):
-        visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k)
+        visual_2d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs)
     elif (len(observations[0]) == 3):
-        visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k)
+        visual_3d(observations, npc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs)
 
 
 def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):

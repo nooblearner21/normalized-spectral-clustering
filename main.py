@@ -56,8 +56,9 @@ def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
             f.write(str(labels)[1: -1] + "\n")
     f.close()
 
+k_for_blobs = 200
 #example
-observations, labels = make_blobs(n_samples=200, n_features=3, centers=10)
+observations, labels = make_blobs(n_samples=200, n_features=3, centers=k_for_blobs)
 
 # Main
 laplace_matrix = get_normalized_laplacian(observations)
@@ -80,7 +81,7 @@ kmeans_labels = visual.build_labels(len(observations), kmeans_clusters_array)
 
 spectral_measure, kmeans_measure = visual.jaccard_measure(labels, spectral_labels, kmeans_labels)
 
-visual.visual(observations, spectral_labels, kmeans_labels, spectral_measure, kmeans_measure, k)
+visual.visual(observations, spectral_labels, kmeans_labels, spectral_measure, kmeans_measure, k, k_for_blobs)
 
 output_data(observations, spectral_clusters_array, kmeans_clusters_array, k)
 

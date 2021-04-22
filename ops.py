@@ -113,45 +113,56 @@ def mgs_algorithm(aroof):
 
 
 def eigengap_heuristic(arr):
-    n = len(arr)
-    sorted_arr = sorted(arr)
-    k = 0
-    max_gap = 0
+    sorted_arr = np.sort(arr)
+    n2 = int(np.ceil(len(arr)/2))
 
-    for i in range(0, int(np.ceil(n / 2))):
-        curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
-
-        if max_gap < curr_gap:
-            max_gap = curr_gap
-            k = i
-
+    k = np.argmax(np.diff(sorted_arr[:n2])) + 1
+    # n = len(arr)
+    # sorted_arr = sorted(arr)
+    # k = 0
+    # max_gap = 0
+    #
+    # for i in range(0, int(np.ceil(n / 2))):
+    #     curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
+    #
+    #     if max_gap < curr_gap:
+    #         max_gap = curr_gap
+    #         k = i
+    #
     return k
 
 
 def build_u_matrix(matrix_tuple):
     n = len(matrix_tuple[0])
     eigenvalues = matrix_tuple[0].diagonal().copy()
-    eigenvectors = matrix_tuple[1].transpose().copy()
+    eigenvectors = matrix_tuple[1].copy()
+    k = eigengap_heuristic(eigenvalues)
+    eig_index = np.argsort(eigenvalues)[:k]
+    u_matrix = eigenvectors[:, eig_index]
 
-    # k + 1 because arrays starts from 0...
-    k = eigengap_heuristic(eigenvalues) + 1
-
-    eigen_map = []
-
-    for i in range(n):
-        eigen_map.append({eigenvalues[i]: eigenvectors[i]})
-
-    sorted_map = sorted(eigen_map, key=lambda item: list(item.keys())[0])
-
-    u_matrix = np.ndarray(shape=(n, k))
-
-
-    for i in range(k):
-        vector = list(sorted_map[i].values())[0]
-        u_matrix[:, i] = vector
-
+#     n = len(matrix_tuple[0])
+#     eigenvalues = matrix_tuple[0].diagonal().copy()
+#     eigenvectors = matrix_tuple[1].transpose().copy()
+#
+#     # k + 1 because arrays starts from 0...
+#     k = eigengap_heuristic(eigenvalues) + 1
+#
+#     eigen_map = []
+#
+#     for i in range(n):
+#         eigen_map.append({eigenvalues[i]: eigenvectors[i]})
+#
+#     sorted_map = sorted(eigen_map, key=lambda item: list(item.keys())[0])
+#
+#     u_matrix = np.ndarray(shape=(n, k))
+#
+#
+#     for i in range(k):
+#         vector = list(sorted_map[i].values())[0]
+#         u_matrix[:, i] = vector
+#
     return u_matrix
-
+#
 
 def build_t_matrix(matrix_tuple):
     u_matrix = build_u_matrix(matrix_tuple)
