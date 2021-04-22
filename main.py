@@ -40,8 +40,6 @@ def cluster(matrix_t, centroids):
 
     return index_list
 
-
-
 def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
     with open("data.txt", "w") as f:
         for observation in observations:
@@ -58,9 +56,8 @@ def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
             f.write(str(labels)[1: -1] + "\n")
     f.close()
 
-
 #example
-observations, labels = make_blobs(n_samples=100, n_features=3)
+observations, labels = make_blobs(n_samples=200, n_features=3, centers=10)
 
 # Main
 laplace_matrix = get_normalized_laplacian(observations)
@@ -81,7 +78,10 @@ kmeans_clusters_array = cluster(observations, kmeans_result)
 spectral_labels = visual.build_labels(len(observations), spectral_clusters_array)
 kmeans_labels = visual.build_labels(len(observations), kmeans_clusters_array)
 
+spectral_measure, kmeans_measure = visual.jaccard_measure(labels, spectral_labels, kmeans_labels)
+
+visual.visual(observations, spectral_labels, kmeans_labels, spectral_measure, kmeans_measure, k)
 
 output_data(observations, spectral_clusters_array, kmeans_clusters_array, k)
 
-# visual.visual(observations, spectral_labels, kmeans_labels),
+
