@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import make_blobs
 
 import visual
-from ops import qr_iterations, build_t_matrix, get_normalized_laplacian
+from ops import qr_decomposition, tmatrix, normalized_laplacian
 
 import kmeanspp
 from kmeans_pp import k_means_pp
@@ -20,6 +20,10 @@ k = args.k
 n = args.n
 random = args.random
 
+
+"""
+Returns the corresponding cluster index ~ observation relationship
+"""
 def cluster(matrix_t, centroids):
     # create list of K lists
     index_list = [[] for i in range(len(centroids))]
@@ -40,6 +44,10 @@ def cluster(matrix_t, centroids):
 
     return index_list
 
+"""
+Outputs the observations used in this program current run aswell as the labels that were given by the KMeans
+and Spectral Clustering Algorithms
+"""
 def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
     with open("data.txt", "w") as f:
         for observation in observations:
@@ -56,16 +64,16 @@ def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
             f.write(str(labels)[1: -1] + "\n")
     f.close()
 
-k_for_blobs = 200
+k_for_blobs = 5
 #example
-observations, labels = make_blobs(n_samples=200, n_features=3, centers=k_for_blobs)
+observations, labels = make_blobs(n_samples=50, n_features=3, centers=k_for_blobs)
 
 # Main
-laplace_matrix = get_normalized_laplacian(observations)
+laplace_matrix = normalized_laplacian(observations)
 
-q = qr_iterations(laplace_matrix)
+q = qr_decomposition(laplace_matrix)
 
-t = build_t_matrix(q)
+t = tmatrix(q)
 k = t.shape[1]
 
 #g = kmeanspp.calc(observations.shape[0], num_of_clusters, t[0:].tolist(), t[0:num_of_clusters].tolist(), num_of_clusters, 300)

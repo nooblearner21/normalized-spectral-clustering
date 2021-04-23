@@ -1,37 +1,41 @@
-import numpy as np
-from numpy import linalg as LA
 import math
 
+import numpy as np
+from numpy import linalg as LA
 
-# Receive N observations ndarray as argument and returns the
-# weighted adjacency matrix
-def get_weighted_adj_matrix(observations):
-    # Create a zero-value NxN matrix
 
+"""
+Create the NxN weighted adjacency matrix from N vector observations
+"""
+def weighted_adj_matrix(observations):
+
+    # Create a zero-value NxN matrix and initialize counters
     zeroshape = observations.shape[0]
-    weightedMatrix = np.zeros((zeroshape, zeroshape), dtype=np.float64)
+    adj_matrix = np.zeros((zeroshape, zeroshape), dtype=np.float64)
 
-    # counters
     i = 0
     j = 0
 
     # Calculate euclidean distance between all nodes and fill node weights in our adjacency matrix
-    for vectorx in observations:
-        for vectory in observations:
-            dist = math.sqrt(np.sum((vectorx - vectory) ** 2))
-            weightedMatrix[i, j] = np.exp(-dist) / 2
+    for node_x in observations:
+        for node_y in observations:
+            dist = math.sqrt(np.sum((node_x - node_y) ** 2))
+            adj_matrix[i, j] = np.exp(-dist) / 2
 
             j += 1
         i += 1
         j = 0
 
-    # Change the diagonal values to zero since we do not allow edges from a node to itself
-    np.fill_diagonal(weightedMatrix, 0)
+    # Change the diagonal values to zero since we do not allow edges from a node onto itself
+    np.fill_diagonal(adj_matrix, 0)
 
-    return weightedMatrix
+    return adj_matrix
 
 
-def get_diagonal_degree_matrix(adj_matrix):
+"""
+Creates the diagonal degree matrix
+"""
+def diagonal_degree_matrix(adj_matrix):
     diag_values = np.sum(adj_matrix, axis=1)
     diag_values_normalized = np.power(diag_values, -0.5)
 
@@ -40,32 +44,36 @@ def get_diagonal_degree_matrix(adj_matrix):
     return matrix_d
 
 
-def get_normalized_laplacian(observations):
-    weighted_adj_matrix = get_weighted_adj_matrix(observations)
+"""
+Calculates the  NxN normalized laplacian matrix given N observations
+"""
+def normalized_laplacian(observations):
+
+    #Creates the weighted adjacency matrix
+    adj_matrix = weighted_adj_matrix(observations)
     # create NxN Identity Matrix I
-    id_matrix = np.identity(weighted_adj_matrix.shape[1])
+    id_matrix = np.identity(adj_matrix.shape[1])
     # Retrieve Diagonal degree matrix
-    diagonal_matrix = get_diagonal_degree_matrix(weighted_adj_matrix)
+    diagonal_matrix = diagonal_degree_matrix(adj_matrix)
 
     # Calculate and return laplacian
-    laplacian = id_matrix - (diagonal_matrix @ weighted_adj_matrix @ diagonal_matrix)
+    laplacian = id_matrix - (diagonal_matrix @ adj_matrix @ diagonal_matrix)
 
     return laplacian
 
 
-def qr_iterations(matrix):
+"""
+Uses the QR Decomposition algortihim to calculate the eigenvalues and the corresponding
+eigenvectors of a given matrix
+"""
+def qr_decomposition(matrix):
 
     aroof = np.copy(matrix)
     qroof = np.identity(len(matrix))
 
-
-
-    #change to N
     for i in range(len(matrix)):
         q, r = mgs_algorithm(aroof)
-        
         aroof = r @ q
-
         matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ q)))
 
         if((matrix_distance < 0.0001).all()):
@@ -73,11 +81,12 @@ def qr_iterations(matrix):
 
         qroof = qroof @ q
 
-
-
     return (aroof, qroof)
 
 
+"""
+Implementation of the The Modified Gram-Schmidt Algorithm used to decompose a matrix to it's eigenvalues and eigenvectors
+"""
 def mgs_algorithm(aroof):
     # avoiding rounded values because of int ndarray
     aroof = aroof.astype(float)
@@ -112,60 +121,56 @@ def mgs_algorithm(aroof):
     return (q_matrix, r_matrix)
 
 
+"""
+The eigengap heruistic which helps us in determining an optimal number of clusters
+"""
 def eigengap_heuristic(arr):
-    sorted_arr = np.sort(arr)
-    n2 = int(np.ceil(len(arr)/2))
+    n = len(arr)
+    sorted_arr = sorted(arr)
+    k = 0
+    max_gap = 0
 
-    k = np.argmax(np.diff(sorted_arr[:n2])) + 1
-    # n = len(arr)
-    # sorted_arr = sorted(arr)
-    # k = 0
-    # max_gap = 0
-    #
-    # for i in range(0, int(np.ceil(n / 2))):
-    #     curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
-    #
-    #     if max_gap < curr_gap:
-    #         max_gap = curr_gap
-    #         k = i
-    #
+    for i in range(0, int(np.ceil(n / 2))):
+        curr_gap = np.abs(sorted_arr[i] - sorted_arr[i + 1])
+
+        if max_gap < curr_gap:
+            max_gap = curr_gap
+            k = i
+
     return k
 
-
-def build_u_matrix(matrix_tuple):
+"""
+Creates The U matrix which is an NxK matrix that its columns represent the K eigenvectors of the smallest K eigenvalues of a matrix 
+"""
+def umatrix(matrix_tuple):
     n = len(matrix_tuple[0])
     eigenvalues = matrix_tuple[0].diagonal().copy()
-    eigenvectors = matrix_tuple[1].copy()
-    k = eigengap_heuristic(eigenvalues)
-    eig_index = np.argsort(eigenvalues)[:k]
-    u_matrix = eigenvectors[:, eig_index]
+    eigenvectors = matrix_tuple[1].transpose().copy()
 
-#     n = len(matrix_tuple[0])
-#     eigenvalues = matrix_tuple[0].diagonal().copy()
-#     eigenvectors = matrix_tuple[1].transpose().copy()
-#
-#     # k + 1 because arrays starts from 0...
-#     k = eigengap_heuristic(eigenvalues) + 1
-#
-#     eigen_map = []
-#
-#     for i in range(n):
-#         eigen_map.append({eigenvalues[i]: eigenvectors[i]})
-#
-#     sorted_map = sorted(eigen_map, key=lambda item: list(item.keys())[0])
-#
-#     u_matrix = np.ndarray(shape=(n, k))
-#
-#
-#     for i in range(k):
-#         vector = list(sorted_map[i].values())[0]
-#         u_matrix[:, i] = vector
-#
+    # k + 1 because arrays starts from 0...
+    k = eigengap_heuristic(eigenvalues) + 1
+
+    eigen_map = []
+
+    for i in range(n):
+        eigen_map.append({eigenvalues[i]: eigenvectors[i]})
+
+    sorted_map = sorted(eigen_map, key=lambda item: list(item.keys())[0])
+
+    u_matrix = np.ndarray(shape=(n, k))
+
+
+    for i in range(k):
+        vector = list(sorted_map[i].values())[0]
+        u_matrix[:, i] = vector
+
     return u_matrix
-#
 
-def build_t_matrix(matrix_tuple):
-    u_matrix = build_u_matrix(matrix_tuple)
+"""
+Creates the T Matrix which normalizes the rows of a given matrix
+"""
+def tmatrix(matrix_tuple):
+    u_matrix = umatrix(matrix_tuple)
 
     n = len(u_matrix)
     k = len(u_matrix[0])
@@ -175,9 +180,5 @@ def build_t_matrix(matrix_tuple):
     t_matrix = np.divide(u_matrix, u_matrix_rows_norms, out=np.zeros_like(u_matrix), where=u_matrix_rows_norms != 0)
 
     return t_matrix
-
-
-def t_matrix(laplace):
-    return build_t_matrix(qr_iterations(laplace))
 
 

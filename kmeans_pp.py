@@ -26,7 +26,8 @@ def k_means_pp(K, N, d, MAX_ITER, observations):
         centroids[j] = observations[chosen_centroid_index]
         centroids_indexes[j] = chosen_centroid_index
 
-    for i in range(0, K-1):
-        print(centroids_indexes[i], end=',')
-    print(centroids_indexes[K-1])
+
     return kmeanspp.calc(N, d, observations.tolist(), centroids.tolist(), K, MAX_ITER)
+
+
+
