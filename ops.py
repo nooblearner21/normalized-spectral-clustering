@@ -91,9 +91,6 @@ def mgs_algorithm(aroof):
     # avoiding rounded values because of int ndarray
     aroof = aroof.astype(float)
 
-    # adding identity matrix to aroof to avoid columns with norm 0
-    # aroof = aroof + np.identity(aroof.shape[0])
-
     n = len(aroof)
     q_matrix = np.zeros(shape=(n, n))
     r_matrix = np.zeros(shape=(n, n))
@@ -132,27 +129,30 @@ def eigengap_heuristic(arr):
 
     return k
 
+
 """
 Creates The U matrix which is an NxK matrix that its columns represent the K eigenvectors of the smallest K eigenvalues of a matrix 
 """
-def umatrix(matrix_tuple):
+def umatrix(matrix_tuple, k ,random):
     n = len(matrix_tuple[0])
 
     eigenvalues = matrix_tuple[0].diagonal().copy()
     eigenvectors = matrix_tuple[1].copy()
 
-    k = eigengap_heuristic(eigenvalues)
+    if random:
+        k = eigengap_heuristic(eigenvalues)
 
     eig_index = np.argsort(eigenvalues)[:k]
     u_matrix = eigenvectors[:, eig_index]
 
     return u_matrix
 
+
 """
 Creates the T Matrix which normalizes the rows of a given matrix
 """
-def tmatrix(matrix_tuple):
-    u_matrix = umatrix(matrix_tuple)
+def tmatrix(matrix_tuple, k, random):
+    u_matrix = umatrix(matrix_tuple, k, random)
 
     n = len(u_matrix)
     k = len(u_matrix[0])
