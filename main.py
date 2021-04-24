@@ -29,14 +29,14 @@ if random:
 
 observations, labels = make_blobs(n_samples=n, n_features=d, centers=k)
 
+# Saving the original k in case random == true
+k_for_blobs = k
+
 laplace_matrix = normalized_laplacian(observations)
 
 q = qr_decomposition(laplace_matrix)
 
 t = tmatrix(q, k, random)
-
-# Saving the original k in case random == true
-k_for_blobs = k
 
 k = t.shape[1]
 
