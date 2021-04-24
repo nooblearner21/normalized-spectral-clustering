@@ -97,17 +97,15 @@ def mgs_algorithm(aroof):
 
     for i in range(n):
 
-        column_i_norm = LA.norm(aroof, axis=0)[i]
+        r_matrix[i, i] = LA.norm(aroof, axis=0)[i]
 
-        r_matrix[i, i] = column_i_norm
-
-        if column_i_norm > 0:
-            q_matrix[:, i] = np.divide(aroof[:, i], column_i_norm)
+        if r_matrix[i, i] > 0:
+            q_matrix[:, i] = np.divide(aroof[:, i], r_matrix[i, i])
         else:
             raise Exception("norm is 0, so we quit the program")
 
         q_i_column_transpose = q_matrix[:, i].T
-        aroof_j_columns = np.copy(aroof[:, i + 1:n])
+        aroof_j_columns = aroof[:, i + 1:n]
         r_row_i_j_values = q_i_column_transpose @ aroof_j_columns
         r_matrix[i, i + 1:n] = r_row_i_j_values
 
