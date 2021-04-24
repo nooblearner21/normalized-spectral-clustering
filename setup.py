@@ -10,6 +10,7 @@ setup(
     description='K-Means Implementation In C',
     install_requires=['invoke'],
     packages=find_packages(),
-    ext_modules=[Extension('kmeanspp', sources=['kmeans.c'])]
+    ext_modules=[Extension('kmeanspp', sources=['kmeans.c'])],
+    headers=['kmeans.h'],
 )
 

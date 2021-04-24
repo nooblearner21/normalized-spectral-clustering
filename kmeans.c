@@ -3,7 +3,7 @@
 //
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
-
+#include "kmeans.h"
 
 
 void printCentroids(int d, int k, const double* centroids)
@@ -267,12 +267,6 @@ static PyObject* calc(PyObject *self, PyObject *args)
             break;
         }
     }
-
-
-    // printf("%d", dimensions);
-    // printf("%d", clusterNum);
-    // printCentroids(dimensions, clusterNum, *centroids);
-
 
 
     for(i=0; i < clusterNum; i++)
