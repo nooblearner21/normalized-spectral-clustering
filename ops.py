@@ -3,7 +3,8 @@ import math
 import numpy as np
 from numpy import linalg as LA
 
-
+from helper import timer
+import time
 EPSILON = 0.0001
 
 """
@@ -67,11 +68,12 @@ def normalized_laplacian(observations):
 Uses the QR Decomposition algortihim to calculate the eigenvalues and the corresponding
 eigenvectors of a given matrix
 """
+@timer
 def qr_decomposition(matrix):
     n = matrix.shape[0]
     aroof = np.copy(matrix)
     qroof = np.identity(n)
-
+    
     for i in range(n):
         q, r = mgs_algorithm(aroof)
         aroof = r @ q
@@ -90,11 +92,11 @@ Implementation of the The Modified Gram-Schmidt Algorithm used to decompose a ma
 """
 def mgs_algorithm(aroof):
     # avoiding rounded values because of int ndarray
-    aroof = aroof.astype(float)
+    aroof = aroof.astype(np.float32)
 
     n = aroof.shape[0]
-    q_matrix = np.zeros(shape=(n, n))
-    r_matrix = np.zeros(shape=(n, n))
+    q_matrix = np.zeros(shape=(n, n), dtype=np.float32)
+    r_matrix = np.zeros(shape=(n, n), dtype=np.float32)
 
     for i in range(n):
         r_matrix[i, i] = LA.norm(aroof, axis=0)[i]
@@ -104,14 +106,8 @@ def mgs_algorithm(aroof):
         else:
             raise Exception("norm is 0, so we quit the program")
 
-        q_i_column_transpose = q_matrix[:, i].T
-        aroof_last_columns = aroof[:, i + 1:n]
-        r_row_i_j_values = q_i_column_transpose @ aroof_last_columns
-        r_matrix[i, i + 1:n] = r_row_i_j_values
-
-        r_ij_q_i = q_i_column_transpose[:, None] * r_row_i_j_values.reshape(1, r_row_i_j_values.shape[0])
-        aroof_j_new_columns = aroof_last_columns - r_ij_q_i
-        aroof[:, i + 1:n] = aroof_j_new_columns
+        r_matrix[i, i + 1:n] = q_matrix[:, i].T @ aroof[:, i + 1:n]  
+        aroof[:, i + 1:n] = aroof[:, i + 1:n] - r_matrix[i, i + 1:n].reshape(1, r_matrix[i, i + 1:n].shape[0]) * q_matrix[:, i].T[:, None]
 
     return q_matrix, r_matrix
 

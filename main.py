@@ -33,7 +33,9 @@ if n <= 0 or K <= 0:
     raise Exception("n and k can't be non-positive")
 
 # Generating the observations
-observations, labels = make_blobs(n_samples=n, n_features=d, centers=K)
+observations, labels = make_blobs(n_samples=n, n_features=d, centers=K, random_state=0)
+
+
 
 # The Normalized Spectral Clustering Algorithm
 laplace_matrix = normalized_laplacian(observations)
