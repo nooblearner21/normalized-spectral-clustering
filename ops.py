@@ -14,7 +14,7 @@ def weighted_adj_matrix(observations):
 
     # Create a zero-value NxN matrix and initialize counters
     zeroshape = observations.shape[0]
-    adj_matrix = np.zeros((zeroshape, zeroshape), dtype=np.float32)
+    adj_matrix = np.zeros((zeroshape, zeroshape), dtype=np.float64)
 
     i = 0
     j = 0
@@ -96,15 +96,19 @@ def mgs_algorithm(aroof):
     r_matrix = np.zeros(shape=(n, n), dtype=np.float32)
 
     for i in range(n):
-        r_matrix[i, i] = LA.norm(aroof, axis=0)[i]
+        col_norm = LA.norm(aroof, axis=0)[i]
+        r_matrix[i, i] = col_norm
 
-        if r_matrix[i, i] > 0:
-            q_matrix[:, i] = np.divide(aroof[:, i], r_matrix[i, i])
+        
+
+        if col_norm > 0:
+            q_col = np.divide(aroof[:, i], col_norm)
+            q_matrix[:, i] = q_col
         else:
             raise Exception("norm is 0, so we quit the program")
 
-        r_matrix[i, i + 1:n] = q_matrix[:, i].T @ aroof[:, i + 1:n]  
-        aroof[:, i + 1:n] = aroof[:, i + 1:n] - r_matrix[None, i, i + 1:n] * q_matrix[:, i].T[:, None]
+        r_matrix[i, i + 1:n] = q_col.T @ aroof[:, i + 1:n]  
+        aroof[:, i + 1:n] -= r_matrix[None, i, i + 1:n] * q_col.T[:, None]
 
     return q_matrix, r_matrix
 
