@@ -14,7 +14,7 @@ def weighted_adj_matrix(observations):
 
     # Create a zero-value NxN matrix and initialize counters
     zeroshape = observations.shape[0]
-    adj_matrix = np.zeros((zeroshape, zeroshape), dtype=np.float64)
+    adj_matrix = np.zeros((zeroshape, zeroshape), dtype=np.float32)
 
     i = 0
     j = 0
@@ -23,7 +23,7 @@ def weighted_adj_matrix(observations):
     for node_x in observations:
         for node_y in observations:
             dist = math.sqrt(np.sum((node_x - node_y) ** 2))
-            adj_matrix[i, j] = np.exp(-dist) / 2
+            adj_matrix[i, j] = np.exp(-dist / 2)
 
             j += 1
         i += 1
@@ -54,7 +54,7 @@ def normalized_laplacian(observations):
     # Creates the weighted adjacency matrix
     adj_matrix = weighted_adj_matrix(observations)
     # Create NxN Identity Matrix I
-    id_matrix = np.identity(adj_matrix.shape[1])
+    id_matrix = np.identity(adj_matrix.shape[1], dtype=np.float32)
     # Retrieve Diagonal degree matrix
     diagonal_matrix = diagonal_degree_matrix(adj_matrix)
 
@@ -91,9 +91,6 @@ def qr_decomposition(matrix):
 Implementation of the The Modified Gram-Schmidt Algorithm used to decompose a matrix to it's eigenvalues and eigenvectors
 """
 def mgs_algorithm(aroof):
-    # avoiding rounded values because of int ndarray
-    aroof = aroof.astype(np.float32)
-
     n = aroof.shape[0]
     q_matrix = np.zeros(shape=(n, n), dtype=np.float32)
     r_matrix = np.zeros(shape=(n, n), dtype=np.float32)
@@ -107,7 +104,7 @@ def mgs_algorithm(aroof):
             raise Exception("norm is 0, so we quit the program")
 
         r_matrix[i, i + 1:n] = q_matrix[:, i].T @ aroof[:, i + 1:n]  
-        aroof[:, i + 1:n] = aroof[:, i + 1:n] - r_matrix[i, i + 1:n].reshape(1, r_matrix[i, i + 1:n].shape[0]) * q_matrix[:, i].T[:, None]
+        aroof[:, i + 1:n] = aroof[:, i + 1:n] - r_matrix[None, i, i + 1:n] * q_matrix[:, i].T[:, None]
 
     return q_matrix, r_matrix
 
