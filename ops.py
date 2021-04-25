@@ -4,6 +4,8 @@ import numpy as np
 from numpy import linalg as LA
 
 
+EPSILON = 0.0001
+
 """
 Create the NxN weighted adjacency matrix from N vector observations
 """
@@ -48,10 +50,9 @@ def diagonal_degree_matrix(adj_matrix):
 Calculates the  NxN normalized laplacian matrix given N observations
 """
 def normalized_laplacian(observations):
-
-    #Creates the weighted adjacency matrix
+    # Creates the weighted adjacency matrix
     adj_matrix = weighted_adj_matrix(observations)
-    # create NxN Identity Matrix I
+    # Create NxN Identity Matrix I
     id_matrix = np.identity(adj_matrix.shape[1])
     # Retrieve Diagonal degree matrix
     diagonal_matrix = diagonal_degree_matrix(adj_matrix)
@@ -67,16 +68,16 @@ Uses the QR Decomposition algortihim to calculate the eigenvalues and the corres
 eigenvectors of a given matrix
 """
 def qr_decomposition(matrix):
-
+    n = matrix.shape[0]
     aroof = np.copy(matrix)
-    qroof = np.identity(len(matrix))
+    qroof = np.identity(n)
 
-    for i in range(len(matrix)):
+    for i in range(n):
         q, r = mgs_algorithm(aroof)
         aroof = r @ q
         matrix_distance = np.abs(np.abs(qroof) - (np.abs(qroof @ q)))
 
-        if((matrix_distance < 0.0001).all()):
+        if (matrix_distance < EPSILON).all():
             return (aroof, qroof)
 
         qroof = qroof @ q
@@ -91,12 +92,11 @@ def mgs_algorithm(aroof):
     # avoiding rounded values because of int ndarray
     aroof = aroof.astype(float)
 
-    n = len(aroof)
+    n = aroof.shape[0]
     q_matrix = np.zeros(shape=(n, n))
     r_matrix = np.zeros(shape=(n, n))
 
     for i in range(n):
-
         r_matrix[i, i] = LA.norm(aroof, axis=0)[i]
 
         if r_matrix[i, i] > 0:
@@ -105,15 +105,15 @@ def mgs_algorithm(aroof):
             raise Exception("norm is 0, so we quit the program")
 
         q_i_column_transpose = q_matrix[:, i].T
-        aroof_j_columns = aroof[:, i + 1:n]
-        r_row_i_j_values = q_i_column_transpose @ aroof_j_columns
+        aroof_last_columns = aroof[:, i + 1:n]
+        r_row_i_j_values = q_i_column_transpose @ aroof_last_columns
         r_matrix[i, i + 1:n] = r_row_i_j_values
 
         r_ij_q_i = q_i_column_transpose[:, None] * r_row_i_j_values.reshape(1, r_row_i_j_values.shape[0])
-        aroof_j_new_columns = aroof_j_columns - r_ij_q_i
+        aroof_j_new_columns = aroof_last_columns - r_ij_q_i
         aroof[:, i + 1:n] = aroof_j_new_columns
 
-    return (q_matrix, r_matrix)
+    return q_matrix, r_matrix
 
 
 """
@@ -131,14 +131,14 @@ def eigengap_heuristic(arr):
 """
 Creates The U matrix which is an NxK matrix that its columns represent the K eigenvectors of the smallest K eigenvalues of a matrix 
 """
-def umatrix(matrix_tuple, k ,random):
-    n = len(matrix_tuple[0])
-
+def umatrix(matrix_tuple, K ,random):
     eigenvalues = matrix_tuple[0].diagonal().copy()
     eigenvectors = matrix_tuple[1].copy()
 
     if random:
         k = eigengap_heuristic(eigenvalues)
+    else:
+        k = K
 
     eig_index = np.argsort(eigenvalues)[:k]
     u_matrix = eigenvectors[:, eig_index]
@@ -149,14 +149,11 @@ def umatrix(matrix_tuple, k ,random):
 """
 Creates the T Matrix which normalizes the rows of a given matrix
 """
-def tmatrix(matrix_tuple, k, random):
-    u_matrix = umatrix(matrix_tuple, k, random)
-
-    n = len(u_matrix)
-    k = len(u_matrix[0])
-
+def tmatrix(matrix_tuple, K, random):
+    u_matrix = umatrix(matrix_tuple, K, random)
     u_matrix_rows_norms = LA.norm(u_matrix, axis=1)[:, None]
 
+    # Normalizing each row in t_matrix
     t_matrix = np.divide(u_matrix, u_matrix_rows_norms, out=np.zeros_like(u_matrix), where=u_matrix_rows_norms != 0)
 
     return t_matrix
