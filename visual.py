@@ -90,13 +90,23 @@ def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):
     spectral_intersection = np.logical_and(jaccard_matrix_blobs, jaccard_matrix_spectral)
     spectral_union = np.logical_or(jaccard_matrix_blobs, jaccard_matrix_spectral)
 
+    # Removing the diagonal because it needs to be 0
+    spectral_intersection = np.logical_xor(spectral_intersection, np.identity(n, dtype=bool))
+    spectral_union = np.logical_xor(spectral_union, np.identity(n, dtype=bool))
+
     spectral_measure = spectral_intersection.sum() / float(spectral_union.sum())
 
     # Calculating the K means Jaccard measure
     kmeans_intersection = np.logical_and(jaccard_matrix_blobs, jaccard_matrix_kmeans)
     kmeans_union = np.logical_or(jaccard_matrix_blobs, jaccard_matrix_kmeans)
 
+    # Remvoing the diagonal because it needs to be 0
+    kmeans_intersection = np.logical_xor(kmeans_intersection, np.identity(n, dtype=bool))
+    kmeans_union = np.logical_xor(kmeans_union, np.identity(n, dtype=bool))
+
     kmeans_measure = kmeans_intersection.sum() / float(kmeans_union.sum())
+
+    # WHAT IF UNION IS 0??
 
     return spectral_measure, kmeans_measure
 
