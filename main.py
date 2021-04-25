@@ -60,6 +60,6 @@ spectral_measure, kmeans_measure = jaccard_measure(labels, spectral_labels, kmea
 
 # Output
 visual(observations, spectral_labels, kmeans_labels, spectral_measure, kmeans_measure, k, K)
-output_data(observations, spectral_clusters_array, kmeans_clusters_array, k)
+output_data(observations, labels, spectral_clusters_array, kmeans_clusters_array, k)
 
 

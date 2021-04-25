@@ -4,11 +4,14 @@ import numpy as np
 Outputs the observations used in this program current run aswell as the labels that were given by the KMeans
 and Spectral Clustering Algorithms
 """
-def output_data(observations, kmeans_labels, spectral_labels, clusters_num):
+def output_data(observations, blob_labels, kmeans_labels, spectral_labels, clusters_num):
     with open("data.txt", "w") as f:
+        label = 0
         for observation in observations:
             for cord in observation:
-                f.write(str(cord))
+                f.write(str(cord) + ",")
+            f.write(str(blob_labels[label]))
+            label += 1
             f.write("\n")
     f.close()
 
