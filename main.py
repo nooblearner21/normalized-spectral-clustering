@@ -27,7 +27,7 @@ if random:
     K = np.random.randint(5, 20)
 
 # Validation of input
-if n < K:
+if n <= K:
     raise Exception("n can't be smaller than k")
 if n <= 0 or K <= 0:
     raise Exception("n and k can't be non-positive")

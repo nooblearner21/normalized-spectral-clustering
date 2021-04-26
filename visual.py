@@ -106,8 +106,6 @@ def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):
 
     kmeans_measure = kmeans_intersection.sum() / float(kmeans_union.sum())
 
-    # WHAT IF UNION IS 0??
-
     return spectral_measure, kmeans_measure
 
 
