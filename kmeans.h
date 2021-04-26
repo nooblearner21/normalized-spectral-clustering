@@ -1,4 +1,3 @@
-
 #ifndef KMEANS_H_   /* Include guard */
 #define KMEANS_H_
 
