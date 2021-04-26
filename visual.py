@@ -90,8 +90,8 @@ def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):
     spectral_union = np.logical_or(jaccard_matrix_blobs, jaccard_matrix_spectral)
 
     # Removing the diagonal with 0's
-    np.fill_diagonal(spectral_intersection, 0)
-    np.fill_diagonal(spectral_union, 0)
+    np.fill_diagonal(spectral_intersection, False)
+    np.fill_diagonal(spectral_union, False)
 
 
     spectral_measure = spectral_intersection.sum() / float(spectral_union.sum())
@@ -101,8 +101,8 @@ def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):
     kmeans_union = np.logical_or(jaccard_matrix_blobs, jaccard_matrix_kmeans)
 
     # Remvoing the diagonal because it needs to be 0
-    np.fill_diagonal(kmeans_intersection, 0)
-    np.fill_diagonal(kmeans_union, 0)
+    np.fill_diagonal(kmeans_intersection, False)
+    np.fill_diagonal(kmeans_union, False)
 
     kmeans_measure = kmeans_intersection.sum() / float(kmeans_union.sum())
 
