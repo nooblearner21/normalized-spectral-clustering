@@ -23,8 +23,8 @@ d = np.random.randint(2, 4)
 MAX_ITER = 300
 
 if random:
-    n = np.random.randint(50, 350)
-    K = np.random.randint(5, 20)
+    n = np.random.randint(200, 400)
+    K = np.random.randint(10, 20)
 
 # Validation of input
 if n <= K:

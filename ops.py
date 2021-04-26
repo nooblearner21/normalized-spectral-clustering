@@ -99,13 +99,13 @@ def mgs_algorithm(aroof):
         col_norm = LA.norm(aroof, axis=0)[i]
         r_matrix[i, i] = col_norm
 
-        
-
+        #Validate that norm is not 0
         if col_norm > 0:
             q_col = np.divide(aroof[:, i], col_norm)
             q_matrix[:, i] = q_col
         else:
             raise Exception("norm is 0, so we quit the program")
+
 
         r_matrix[i, i + 1:n] = q_col.T @ aroof[:, i + 1:n]  
         aroof[:, i + 1:n] -= r_matrix[None, i, i + 1:n] * q_col.T[:, None]
