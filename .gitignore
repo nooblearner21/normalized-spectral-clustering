@@ -6,3 +6,4 @@ kmeanspp.cp*
 clusters.txt
 data.txt
 helper.py
+clusters.pdf

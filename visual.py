@@ -37,7 +37,7 @@ def visual_2d(observations, nsc_labels, kmeans_labels, spectral_measure, kmeans_
 
     plt.subplots_adjust(top=0.75)
 
-    plt.savefig('figure.pdf')
+    plt.savefig('clusters.pdf')
 
 
 # three dimensions case
@@ -64,7 +64,7 @@ def visual_3d(observations, nsc_labels, kmeans_labels, spectral_measure, kmeans_
 
     plt.subplots_adjust(top=0.75)
 
-    plt.savefig('figure.pdf')
+    plt.savefig('clusters.pdf')
 
 
 def visual(observations, nsc_labels, kmeans_labels, spectral_measure, kmeans_measure, k, K):
