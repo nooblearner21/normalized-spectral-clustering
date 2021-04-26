@@ -33,7 +33,7 @@ if n <= 0 or K <= 0:
     raise Exception("n and k can't be non-positive")
 
 # Generating the observations
-observations, labels = make_blobs(n_samples=n, n_features=d, centers=K, random_state=0)
+observations, labels = make_blobs(n_samples=n, n_features=d, centers=K)
 
 
 
