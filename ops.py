@@ -3,8 +3,8 @@ import math
 import numpy as np
 from numpy import linalg as LA
 
-from helper import timer
-import time
+
+
 EPSILON = 0.0001
 
 """
@@ -68,7 +68,7 @@ def normalized_laplacian(observations):
 Uses the QR Decomposition algortihim to calculate the eigenvalues and the corresponding
 eigenvectors of a given matrix
 """
-@timer
+
 def qr_decomposition(matrix):
     n = matrix.shape[0]
     aroof = np.copy(matrix)

@@ -77,14 +77,13 @@ def visual(observations, nsc_labels, kmeans_labels, spectral_measure, kmeans_mea
 
 def jaccard_measure(blobs_labels, spectral_labels, kmeans_labels):
     n = len(blobs_labels)
-    blobs_labels = blobs_labels.copy()
-    spectral_labels = spectral_labels.copy()
-    kmeans_labels = kmeans_labels.copy()
+
 
     # Creating the pairs matrix for make_blobs, spectral algorithm and kmeans
     jaccard_matrix_blobs = np.equal(blobs_labels.reshape(n, 1), blobs_labels.reshape(1, n))
     jaccard_matrix_spectral = np.equal(spectral_labels.reshape(n, 1), spectral_labels.reshape(1, n))
     jaccard_matrix_kmeans = np.equal(kmeans_labels.reshape(n, 1), kmeans_labels.reshape(1, n))
+
 
     # Calculating the Spectral algorithm Jaccard measure
     spectral_intersection = np.logical_and(jaccard_matrix_blobs, jaccard_matrix_spectral)
