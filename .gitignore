@@ -7,3 +7,5 @@ clusters.txt
 data.txt
 helper.py
 clusters.pdf
+.vscode
+.idea
