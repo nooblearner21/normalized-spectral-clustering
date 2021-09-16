@@ -3,8 +3,8 @@
 # TAU Software Project Course
 ## Final Project
 ### Submitted by
-* **Yonatan Tintpulver** &ensp;
-* **Dan Mika**&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
+* **Dan Mika** &ensp;
+* **Yonatan Tintpulver**&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
 
 ### Project Modules
 #### K-means C-API
@@ -14,8 +14,6 @@ The following files are required for running the K-means++ algorithm (using Pyth
 * `kmeans_pp.py`
 * `setup.py`
 
-
-<div style="text-align: center;"><img src="https://github.com/nooblearner21/normalized-spectral-clustering/blob/main/example.jpg" alt="Example"></div>
 
 
 
@@ -39,5 +37,7 @@ Output files:
 * `clusters.txt` — computed clusters for both algorithms
 * `clusters.pdf` — graphical visualization comparing K-means and Spectral Clustering algorithms
 
+### Example Output
 
+<div style="text-align: center;"><img src="https://github.com/nooblearner21/normalized-spectral-clustering/blob/main/example.jpg" alt="Example"></div>
 
