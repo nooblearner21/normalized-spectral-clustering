@@ -14,7 +14,11 @@ The following files are required for running the K-means++ algorithm (using Pyth
 * `kmeans_pp.py`
 * `setup.py`
 
+
 <div style="text-align: center;"><img src="https://github.com/nooblearner21/normalized-spectral-clustering/blob/main/example.jpg" width="50%" height="50%" alt="TAU"></div>
+
+
+[embed]https://github.com/nooblearner21/normalized-spectral-clustering/blob/main/example_output.pdf[/embed]
 
 
 #### Spectral Clustering Algorithm
